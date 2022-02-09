@@ -120,7 +120,7 @@ token::tokenlist token::tokenize(wstring code) {
 				if (code[i + j + 1] == L'우') ++j;
 				else break;
 			}
-			ret.push_back(token(token_type::sub, code.substr(i, j + 1), error::info(col, row)));
+			ret.push_back(token(token_type::var_value, code.substr(i, j + 1), error::info(col, row)));
 			i += j;
 			continue;
 		} else if (code[i] == L'\n') {

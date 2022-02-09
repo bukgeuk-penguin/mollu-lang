@@ -36,7 +36,7 @@ int calc(token::tokenlist& tokenlist, unsigned int& idx) {
 					temp = getwchar();
 				break;
 			default:
-				error::throwerror(tokenlist[idx].info, L"", 0);
+				error::throwerror(tokenlist[i].info, L"", 0);
 			}
 
 			if (i == idx) value += temp;
@@ -68,27 +68,30 @@ void run::run(token::tokenlist tokenlist) {
 	for (unsigned int i = 0; i < tokenlist.size(); i++) {
 		switch (tokenlist[i].type) {
 		case token::token_type::assign: {
+			int temp = tokenlist[i].str.length();
 			++i;
 			int value = calc(tokenlist, i);
-			vartable[tokenlist[i].str.length() - 3] = value;
+			vartable[temp - 3] = value;
 			break;
 		}
 		case token::token_type::jump_equal:
 		case token::token_type::jump_less: 
 		case token::token_type::jump_greater: {
+			auto temp = tokenlist[i].type;
 			++i;
 			int value = calc(tokenlist, i);
 			++i;
+			if (i >= tokenlist.size()) error::throwerror(tokenlist[i - 1].info, L"", 0);
 			if (tokenlist[i].type == token::token_type::label) {
 				auto togo = labeltable[tokenlist[i].str.length() - 4];
-				if (togo == 0) {
+				if (togo < 0) {
 					error::throwerror(tokenlist[i].info, L"", 0);
 				}
 
 				bool condition = false;
-				if (tokenlist[i].type == token::token_type::jump_equal) condition = (value == 0);
-				else if (tokenlist[i].type == token::token_type::jump_less) condition = (value < 0);
-				else if (tokenlist[i].type == token::token_type::jump_greater) condition = (value > 0);
+				if (temp == token::token_type::jump_equal) condition = (value == 0);
+				else if (temp == token::token_type::jump_less) condition = (value < 0);
+				else if (temp == token::token_type::jump_greater) condition = (value > 0);
 
 				if (condition) {
 					i = togo;
