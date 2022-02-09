@@ -36,7 +36,7 @@ int calc(token::tokenlist& tokenlist, unsigned int& idx) {
 					temp = getwchar();
 				break;
 			default:
-				error::throwerror(tokenlist[idx].info, L"", 0);
+				error::throwerror(tokenlist[i].info, L"", 0);
 			}
 
 			if (i == idx) value += temp;
