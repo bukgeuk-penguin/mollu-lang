@@ -1,6 +1,6 @@
 {
   "name": "mollu-lang-web",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "몰?루",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -11,12 +11,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bukgeuk-penguin/mullu-lang.git"
+    "url": "git+https://github.com/bukgeuk-penguin/mollu-lang.git"
   },
   "author": "Bukgeuk",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/bukgeuk-penguin/mullu-lang/issues"
+    "url": "https://github.com/bukgeuk-penguin/mollu-lang/issues"
   },
   "homepage": "https://mollu.gangjun.dev/",
   "devDependencies": {
