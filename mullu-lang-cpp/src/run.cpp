@@ -81,6 +81,7 @@ void run::run(token::tokenlist tokenlist) {
 			++i;
 			int value = calc(tokenlist, i);
 			++i;
+			if (i >= tokenlist.size()) error::throwerror(tokenlist[i - 1].info, L"", 0);
 			if (tokenlist[i].type == token::token_type::label) {
 				auto togo = labeltable[tokenlist[i].str.length() - 4];
 				if (togo < 0) {
