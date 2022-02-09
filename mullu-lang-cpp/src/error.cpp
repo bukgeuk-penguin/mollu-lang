@@ -1,8 +1,8 @@
-#include "error.hpp"
+ï»¿#include "error.hpp"
 
 error::info::info(int col, int row): col(col), row(row) {}
 
 void error::throwerror(info info, wstring reason, int errcode) {
-	wcout << L"ÀÌ ºÎºÐÀ» ¸ô?·ç°Ú¾î (" << info.col << ", " << info.row << ")" << endl;
+	wcout << L"ì´ ë¶€ë¶„ì„ ëª°?ë£¨ê² ì–´ (" << info.col << ", " << info.row << ")" << endl;
 	exit(errcode);
 }

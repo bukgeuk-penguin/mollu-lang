@@ -1,4 +1,4 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include <string>
 #include <fstream>
 #include <locale.h>
@@ -19,7 +19,7 @@ int main(int argc, char** argv) {
 
 	string path(argv[1]);
 	if (path.substr(path.rfind('.')) != ".mol") {
-		wcout << L"¸ô?·ç´Â ÆÄÀÏÀÌ¾ß" << endl;
+		wcout << L"ëª°?ë£¨ëŠ” íŒŒì¼ì´ì•¼" << endl;
 		return 0;
 	}
 	

@@ -1,4 +1,4 @@
-#include "token.hpp"
+ï»¿#include "token.hpp"
 
 token::tokenlist token::tokenize(wstring code) {
 	tokenlist ret;
@@ -8,116 +8,116 @@ token::tokenlist token::tokenize(wstring code) {
 	for (size_t i = 0; i < code.length(); i++) {
 		++row;
 
-		if (i + 4 < code.length()) { // 5±ÛÀÚ
-			if (code[i] == L'¸ð' && code[i + 1] == L'¿À' && code[i + 2] == L'¿Ã' && code[i + 3] == L'?' && code[i + 4] == L'·ç') { // Á¡ÇÁ (n > 0)
+		if (i + 4 < code.length()) { // 5ê¸€ìž
+			if (code[i] == L'ëª¨' && code[i + 1] == L'ì˜¤' && code[i + 2] == L'ì˜¬' && code[i + 3] == L'?' && code[i + 4] == L'ë£¨') { // ì í”„ (n > 0)
 				ret.push_back(token(token_type::jump_greater, code.substr(i, 5), error::info(col, row)));
 				i += 4;
 				continue;
 			}
 		}
-		if (i + 3 < code.length()) { // 4±ÛÀÚ
-			if (code[i] == L'¸ð' && code[i + 1] == L'¿Ã' && code[i + 3] == L'·ç') {
-				if (code[i + 2] == L'?') { // Á¡ÇÁ (n < 0)
+		if (i + 3 < code.length()) { // 4ê¸€ìž
+			if (code[i] == L'ëª¨' && code[i + 1] == L'ì˜¬' && code[i + 3] == L'ë£¨') {
+				if (code[i + 2] == L'?') { // ì í”„ (n < 0)
 					ret.push_back(token(token_type::jump_less, code.substr(i, 4), error::info(col, row)));
 					i += 3;
 					continue;
-				} else if (code[i + 2] == L'!') { // ¹®ÀÚ Ãâ·Â
+				} else if (code[i + 2] == L'!') { // ë¬¸ìž ì¶œë ¥
 					ret.push_back(token(token_type::output_character, code.substr(i, 4), error::info(col, row)));
 					i += 3;
 					continue;
 				}
-			} else if (code[i] == L'¿Ö' && code[i + 3] == L'·ç') {
-				if (code[i + 1] == L'¸ô' && code[i + 2] == L'?') { // ¶óº§ Á¤ÀÇ
+			} else if (code[i] == L'ì™œ' && code[i + 3] == L'ë£¨') {
+				if (code[i + 1] == L'ëª°' && code[i + 2] == L'?') { // ë¼ë²¨ ì •ì˜
 					size_t j = 0;
 					while (i + j < code.length()) {
-						if (code[i + j + 4] == L'¿ì') ++j;
+						if (code[i + j + 4] == L'ìš°') ++j;
 						else break;
 					}
 					ret.push_back(token(token_type::define_label, code.substr(i, j + 4), error::info(col, row)));
 					i += 3 + j;
 					continue;
-				} else if (code[i + 1] == L'¾Æ' && code[i + 2] == L'!') { // ¶óº§
+				} else if (code[i + 1] == L'ì•„' && code[i + 2] == L'!') { // ë¼ë²¨
 					size_t j = 0;
 					while (i + j < code.length()) {
-						if (code[i + j + 4] == L'¿ì') ++j;
+						if (code[i + j + 4] == L'ìš°') ++j;
 						else break;
 					}
 					ret.push_back(token(token_type::label, code.substr(i, j + 4), error::info(col, row)));
 					i += 3 + j;
 					continue;
 				}
-			} else if (code[i] == L'¾Æ' && code[i + 1] == L'¾Æ' && code[i + 2] == L'?' && code[i + 3] == L'·ç') { // ¹®ÀÚ ÀÔ·Â
+			} else if (code[i] == L'ì•„' && code[i + 1] == L'ì•„' && code[i + 2] == L'?' && code[i + 3] == L'ë£¨') { // ë¬¸ìž ìž…ë ¥
 				ret.push_back(token(token_type::input_character, code.substr(i, 4), error::info(col, row)));
 				i += 3;
 				continue;
 			}
 		}
-		if (i + 2 < code.length()) { // 3±ÛÀÚ
-			if (code[i] == L'¾Æ' && code[i + 2] == L'·ç') {
-				if (code[i + 1] == L'!') { // º¯¼ö ÇÒ´ç
+		if (i + 2 < code.length()) { // 3ê¸€ìž
+			if (code[i] == L'ì•„' && code[i + 2] == L'ë£¨') {
+				if (code[i + 1] == L'!') { // ë³€ìˆ˜ í• ë‹¹
 					size_t j = 0;
 					while (i + j < code.length()) {
-						if (code[i + j + 3] == L'¿ì') ++j;
+						if (code[i + j + 3] == L'ìš°') ++j;
 						else break;
 					}
 					ret.push_back(token(token_type::assign, code.substr(i, j + 3), error::info(col, row)));
 					i += 2 + j;
 					continue;
-				} else if (code[i + 1] == L'?') { // Á¤¼ö ÀÔ·Â
+				} else if (code[i + 1] == L'?') { // ì •ìˆ˜ ìž…ë ¥
 					ret.push_back(token(token_type::input_number, code.substr(i, 3), error::info(col, row)));
 					i += 2;
 					continue;
-				} else if (code[i + 1] == L'¾Æ') { // -10
+				} else if (code[i + 1] == L'ì•„') { // -10
 					ret.push_back(token(token_type::negative_ten, code.substr(i, 3), error::info(col, row)));
 					i += 2;
 					continue;
 				}
-			} else if (code[i] == L'¸ô' && code[i + 2] == L'·ç') {
-				if (code[i + 1] == L'?') { // Á¡ÇÁ (n == 0)
+			} else if (code[i] == L'ëª°' && code[i + 2] == L'ë£¨') {
+				if (code[i + 1] == L'?') { // ì í”„ (n == 0)
 					ret.push_back(token(token_type::jump_equal, code.substr(i, 3), error::info(col, row)));
 					i += 2;
 					continue;
-				} else if (code[i + 1] == L'!') { // Á¤¼ö Ãâ·Â
+				} else if (code[i + 1] == L'!') { // ì •ìˆ˜ ì¶œë ¥
 					ret.push_back(token(token_type::output_number, code.substr(i, 3), error::info(col, row)));
 					i += 2;
 					continue;
 				}
-			} else if (code[i] == L'¸ð' && code[i + 1] == L'¿Ã' && code[i + 2] == L'·ç') { // 10
+			} else if (code[i] == L'ëª¨' && code[i + 1] == L'ì˜¬' && code[i + 2] == L'ë£¨') { // 10
 				ret.push_back(token(token_type::positive_ten, code.substr(i, 3), error::info(col, row)));
 				i += 2;
 				continue;
 			}
 		}
-		if (i + 1 < code.length()) { // 2±ÛÀÚ
-			if (code[i] == L'¾Æ' && code[i + 1] == L'·ç') { // -1
+		if (i + 1 < code.length()) { // 2ê¸€ìž
+			if (code[i] == L'ì•„' && code[i + 1] == L'ë£¨') { // -1
 				ret.push_back(token(token_type::negative_one, code.substr(i, 2), error::info(col, row)));
 				++i;
 				continue;
-			} else if (code[i] == L'¸ô' && code[i + 1] == L'·ç') { // 1
+			} else if (code[i] == L'ëª°' && code[i + 1] == L'ë£¨') { // 1
 				ret.push_back(token(token_type::positive_one, code.substr(i, 2), error::info(col, row)));
 				++i;
 				continue;
-			} else if (code[i] == L'?' && code[i + 1] == L'?') { // °ö¼À
+			} else if (code[i] == L'?' && code[i + 1] == L'?') { // ê³±ì…ˆ
 				ret.push_back(token(token_type::mul, code.substr(i, 2), error::info(col, row)));
 				++i;
 				continue;
-			} else if (code[i] == L'!' && code[i + 1] == L'!') { // ³ª´°¼À
+			} else if (code[i] == L'!' && code[i + 1] == L'!') { // ë‚˜ëˆ—ì…ˆ
 				ret.push_back(token(token_type::div, code.substr(i, 2), error::info(col, row)));
 				++i;
 				continue;
 			}
 		}
-		// 1±ÛÀÚ
-		if (code[i] == L'?') { // µ¡¼À
+		// 1ê¸€ìž
+		if (code[i] == L'?') { // ë§ì…ˆ
 			ret.push_back(token(token_type::add, code.substr(i, 1), error::info(col, row)));
 			continue;
-		} else if (code[i] == L'!') { // »¬¼À
+		} else if (code[i] == L'!') { // ëº„ì…ˆ
 			ret.push_back(token(token_type::sub, code.substr(i, 1), error::info(col, row)));
 			continue;
-		} else if (code[i] == L'·ç') {
+		} else if (code[i] == L'ë£¨') {
 			size_t j = 0;
 			while (i + j < code.length()) {
-				if (code[i + j + 1] == L'¿ì') ++j;
+				if (code[i + j + 1] == L'ìš°') ++j;
 				else break;
 			}
 			ret.push_back(token(token_type::sub, code.substr(i, j + 1), error::info(col, row)));
