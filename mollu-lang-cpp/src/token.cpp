@@ -86,6 +86,14 @@ token::tokenlist token::tokenize(wstring code) {
 				ret.push_back(token(token_type::positive_ten, code.substr(i, 3), error::info(col, row)));
 				i += 2;
 				continue;
+			} else if (code[i] == L'<' && code[i + 1] == L'-' && code[i + 2] == L'-') { // 블럭 주석 시작(<--)
+				ret.push_back(token(token_type::block_comment_start, code.substr(i, 3), error::info(col, row)));
+				i += 2;
+				continue;
+			} else if (code[i] == L'-' && code[i + 1] == L'-' && code[i + 2] == L'>') { // 블럭 주석 끝(-->)
+				ret.push_back(token(token_type::block_comment_end, code.substr(i, 3), error::info(col, row)));
+				i += 2;
+				continue;
 			}
 		}
 		if (i + 1 < code.length()) { // 2글자
@@ -103,6 +111,18 @@ token::tokenlist token::tokenize(wstring code) {
 				continue;
 			} else if (code[i] == L'!' && code[i + 1] == L'!') { // 나눗셈
 				ret.push_back(token(token_type::div, code.substr(i, 2), error::info(col, row)));
+				++i;
+				continue;
+			} else if ((code[i] == L'/' && code[i + 1] == L'/') || (code[i] == L'=' && code[i + 1] == L'>')) { // 라인 주석
+				ret.push_back(token(token_type::line_comment, code.substr(i, 2), error::info(col, row)));
+				++i;
+				continue;
+			} else if (code[i] == L'/' && code[i + 1] == L'*') { // 블럭 주석 시작(/*)
+				ret.push_back(token(token_type::block_comment_start, code.substr(i, 2), error::info(col, row)));
+				++i;
+				continue;
+			} else if (code[i] == L'*' && code[i + 1] == L'/') { // 블럭 주석 끝(*/)
+				ret.push_back(token(token_type::block_comment_end, code.substr(i, 2), error::info(col, row)));
 				++i;
 				continue;
 			}
@@ -124,6 +144,7 @@ token::tokenlist token::tokenize(wstring code) {
 			i += j;
 			continue;
 		} else if (code[i] == L'\n') {
+			ret.push_back(token(token_type::line_feed, code.substr(i, 1), error::info(col, row)));
 			++col;
 			row = 0;
 		}

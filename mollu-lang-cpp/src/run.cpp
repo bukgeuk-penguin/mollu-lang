@@ -65,7 +65,26 @@ int calc(token::tokenlist& tokenlist, unsigned int& idx) {
 }
 
 void run::run(token::tokenlist tokenlist) {
+	short comment = 0; // 0 = none, 1 = line, 2 = block
+
 	for (unsigned int i = 0; i < tokenlist.size(); i++) {
+		switch (tokenlist[i].type) {
+		case token::token_type::line_comment:
+			if (comment == 0) comment = 1;
+			break;
+		case token::token_type::line_feed:
+			if (comment == 1) comment = 0;
+			break;
+		case token::token_type::block_comment_start:
+			if (comment == 0) comment = 2;
+			break;
+		case token::token_type::block_comment_end:
+			if (comment == 2) comment = 0;
+			break;
+		}
+
+		if (comment != 0) continue;
+
 		switch (tokenlist[i].type) {
 		case token::token_type::assign: {
 			int temp = tokenlist[i].str.length();
@@ -117,6 +136,11 @@ void run::run(token::tokenlist tokenlist) {
 			putwchar(value);
 			break;
 		}
+		case token::token_type::line_comment:
+		case token::token_type::line_feed:
+		case token::token_type::block_comment_start:
+		case token::token_type::block_comment_end:
+			break;
 		default:
 			error::throwerror(tokenlist[i].info, L"", 0);
 		}

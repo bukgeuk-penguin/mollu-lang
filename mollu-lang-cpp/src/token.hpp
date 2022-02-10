@@ -29,6 +29,10 @@ namespace token {
 		input_character,
 		output_number,
 		output_character,
+		line_comment,
+		block_comment_start,
+		block_comment_end,
+		line_feed,
 		unknown
 	};
 
