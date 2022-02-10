@@ -96,11 +96,14 @@ void run::runFile(token::tokenlist tokenlist) {
 		case token::token_type::jump_equal:
 		case token::token_type::jump_less: 
 		case token::token_type::jump_greater: {
+			if (i + 2 >= tokenlist.size()) {
+				error::throwerror(tokenlist[i].info, L"", 0);
+				break;
+			}
 			auto temp = tokenlist[i].type;
 			++i;
 			int value = calc(tokenlist, i);
 			++i;
-			if (i >= tokenlist.size()) error::throwerror(tokenlist[i - 1].info, L"", 0);
 			if (tokenlist[i].type == token::token_type::label) {
 				auto togo = labeltable[tokenlist[i].str.length() - 4];
 				if (togo < 0) {
@@ -194,11 +197,14 @@ void run::runRepl() {
 			case token::token_type::jump_equal:
 			case token::token_type::jump_less:
 			case token::token_type::jump_greater: {
+				if (i + 2 >= tokenlist.size()) {
+					error::throwerror(tokenlist[i].info, L"", 0);
+					break;
+				}
 				auto temp = tokenlist[i].type;
-				++i;
+				++i;		
 				int value = calc(tokenlist, i);
 				++i;
-				if (i >= tokenlist.size()) error::throwerror(tokenlist[i - 1].info, L"", 0);
 				if (tokenlist[i].type == token::token_type::label) {
 					auto togo = labeltable[tokenlist[i].str.length() - 4];
 					if (togo < 0) {
