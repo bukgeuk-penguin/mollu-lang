@@ -1,7 +1,8 @@
 import { info } from './error'
 
 export type token_type = 'assign' | 'var_value' | 'add' | 'sub' | 'mul' | 'div' | 'positive_one' | 'positive_ten' | 'negative_one' | 'negative_ten' |
-'jump_equal' | 'jump_less' | 'jump_greater' | 'define_label' | 'label' | 'input_number' | 'input_character' | 'output_number' | 'output_character' | 'unknown'
+'jump_equal' | 'jump_less' | 'jump_greater' | 'define_label' | 'label' | 'input_number' | 'input_character' | 'output_number' | 'output_character' |
+'line_comment' | 'block_comment_start' |'block_comment_end' | 'line_feed' | 'unknown'
 
 export type tokenlist = Array<token>
 
@@ -102,6 +103,14 @@ export function tokenize(code: string): tokenlist {
 				ret.push(new token('positive_ten', code.substring(i, i + 3), new info(col, row)));
 				i += 2;
 				continue;
+			}  else if (code[i] === '<' && code[i + 1] === '-' && code[i + 2] === '-') { // 블럭 주석 시작(<--)
+				ret.push(new token('block_comment_start', code.substring(i, i + 3), new info(col, row)));
+				i += 2;
+				continue;
+			} else if (code[i] === '-' && code[i + 1] === '-' && code[i + 2] === '>') { // 블럭 주석 끝(-->)
+				ret.push(new token('block_comment_end', code.substring(i, i + 3), new info(col, row)));
+				i += 2;
+				continue;
 			}
 		}
 		if (i + 1 < code.length) { // 2글자
@@ -119,6 +128,18 @@ export function tokenize(code: string): tokenlist {
 				continue;
 			} else if (code[i] === '!' && code[i + 1] === '!') { // 나눗셈
 				ret.push(new token('div', code.substring(i, i + 2), new info(col, row)));
+				++i;
+				continue;
+			} else if ((code[i] === '/' && code[i + 1] === '/') || (code[i] === '=' && code[i + 1] === '>')) { // 라인 주석
+				ret.push(new token('line_comment', code.substring(i, i + 2), new info(col, row)));
+				++i;
+				continue;
+			} else if (code[i] === '/' && code[i + 1] === '*') { // 블럭 주석 시작(/*)
+				ret.push(new token('block_comment_start', code.substring(i, i + 2), new info(col, row)));
+				++i;
+				continue;
+			} else if (code[i] === '*' && code[i + 1] === '/') { // 블럭 주석 끝(*/)
+				ret.push(new token('block_comment_end', code.substring(i, i + 2), new info(col, row)));
 				++i;
 				continue;
 			}
@@ -140,6 +161,7 @@ export function tokenize(code: string): tokenlist {
 			i += j;
 			continue;
 		} else if (code[i] === '\n') {
+			ret.push(new token('line_feed', code.substring(i, i + 1), new info(col, row)));
 			++col;
 			row = 0;
 		}

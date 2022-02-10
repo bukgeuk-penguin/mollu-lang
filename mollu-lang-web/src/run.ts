@@ -66,8 +66,28 @@ function calc(tokenlist: tokenlist): number {
 }
 
 export function run(tokenlist: tokenlist) {
+	let comment = 0; // 0 = none, 1 = line, 2 = block
+
 	for (let i = 0; i < tokenlist.length; i++) {
         if (isErrorOccurred()) break;
+
+		switch (tokenlist[i].type) {
+			case 'line_comment':
+				if (comment == 0) comment = 1;
+				break;
+			case 'line_feed':
+				if (comment == 1) comment = 0;
+				break;
+			case 'block_comment_start':
+				if (comment == 0) comment = 2;
+				break;
+			case 'block_comment_end':
+				if (comment == 2) comment = 0;
+				break;
+		}
+	
+		if (comment != 0) continue;
+
 		switch (tokenlist[i].type) {
 		case 'assign': {
 			let temp = tokenlist[i].str.length;
@@ -127,6 +147,11 @@ export function run(tokenlist: tokenlist) {
             output_character(value)
 			break;
 		}
+		case 'line_comment':
+		case 'line_feed':
+		case 'block_comment_start':
+		case 'block_comment_end':
+			break;
 		default:
 			throwerror(tokenlist[i].info, "", 0);
 		}
