@@ -14,5 +14,13 @@ namespace error {
 		info(int col, int row);
 	};
 
+	class repl {
+	private:
+		static bool _repl;
+	public:
+		static bool isRepl();
+		static void toggleRepl();
+	};
+
 	void throwerror(info info, wstring reason, int errcode);
 }

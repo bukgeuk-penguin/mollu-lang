@@ -64,7 +64,7 @@ int calc(token::tokenlist& tokenlist, unsigned int& idx) {
 	return value;
 }
 
-void run::run(token::tokenlist tokenlist) {
+void run::runFile(token::tokenlist tokenlist) {
 	short comment = 0; // 0 = none, 1 = line, 2 = block
 
 	for (unsigned int i = 0; i < tokenlist.size(); i++) {
@@ -145,4 +145,105 @@ void run::run(token::tokenlist tokenlist) {
 			error::throwerror(tokenlist[i].info, L"", 0);
 		}
 	}
+}
+
+void run::runRepl() {
+	error::repl::toggleRepl();
+	wcout << L"mollu-lang-cpp " << run::version << L"\n";
+	wcout << L"Type exit or exit() to exit\n";
+
+	short comment = 0; // 0 = none, 1 = line, 2 = block
+	token::tokenlist tokenlist;
+
+	unsigned int i = 0;
+
+	wstring cmd;
+	while (true) {
+		wcout << L">>> ";
+		getline(wcin, cmd);
+		if (cmd == L"exit" || cmd == L"exit()") break;
+		auto tl = token::tokenize(cmd);
+		tokenlist.insert(tokenlist.end(), tl.begin(), tl.end());
+
+		for (; i < tokenlist.size(); i++) {
+			switch (tokenlist[i].type) {
+			case token::token_type::line_comment:
+				if (comment == 0) comment = 1;
+				break;
+			case token::token_type::line_feed:
+				if (comment == 1) comment = 0;
+				break;
+			case token::token_type::block_comment_start:
+				if (comment == 0) comment = 2;
+				break;
+			case token::token_type::block_comment_end:
+				if (comment == 2) comment = 0;
+				break;
+			}
+
+			if (comment != 0) continue;
+
+			switch (tokenlist[i].type) {
+			case token::token_type::assign: {
+				int temp = tokenlist[i].str.length();
+				++i;
+				int value = calc(tokenlist, i);
+				vartable[temp - 3] = value;
+				break;
+			}
+			case token::token_type::jump_equal:
+			case token::token_type::jump_less:
+			case token::token_type::jump_greater: {
+				auto temp = tokenlist[i].type;
+				++i;
+				int value = calc(tokenlist, i);
+				++i;
+				if (i >= tokenlist.size()) error::throwerror(tokenlist[i - 1].info, L"", 0);
+				if (tokenlist[i].type == token::token_type::label) {
+					auto togo = labeltable[tokenlist[i].str.length() - 4];
+					if (togo < 0) {
+						error::throwerror(tokenlist[i].info, L"", 0);
+					}
+
+					bool condition = false;
+					if (temp == token::token_type::jump_equal) condition = (value == 0);
+					else if (temp == token::token_type::jump_less) condition = (value < 0);
+					else if (temp == token::token_type::jump_greater) condition = (value > 0);
+
+					if (condition) {
+						i = togo;
+					}
+				} else {
+					error::throwerror(tokenlist[i].info, L"", 0);
+				}
+				break;
+			}
+			case token::token_type::define_label: {
+				labeltable[tokenlist[i].str.length() - 4] = i;
+				break;
+			}
+			case token::token_type::output_number: {
+				++i;
+				int value = calc(tokenlist, i);
+				cout << value << endl;
+				break;
+			}
+			case token::token_type::output_character: {
+				++i;
+				int value = calc(tokenlist, i);
+				putwchar(value);
+				cout << endl;
+				break;
+			}
+			case token::token_type::line_comment:
+			case token::token_type::line_feed:
+			case token::token_type::block_comment_start:
+			case token::token_type::block_comment_end:
+				break;
+			default:
+				error::throwerror(tokenlist[i].info, L"", 0);
+			}
+		}
+	}
+	error::repl::toggleRepl();
 }
