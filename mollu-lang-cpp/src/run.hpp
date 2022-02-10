@@ -5,7 +5,7 @@
 #include "token.hpp"
 
 namespace run {
-	const wstring version = L"v1.1.0";
+	const wstring version = L"v1.2.0";
 
 	void runFile(token::tokenlist tokenlist);
 
