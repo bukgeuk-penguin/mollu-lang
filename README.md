@@ -1,8 +1,11 @@
 # 몰?랭
 
-이 프로젝트는 [rycont/umjunsik-lang](https://github.com/rycont/umjunsik-lang)에 영감을 받아 제작되었습니다.
+이 프로젝트는 [rycont/umjunsik-lang](https://github.com/rycont/umjunsik-lang)에 영감을 받아 제작되었습니다.  
 
 ![IMG_1831](https://user-images.githubusercontent.com/41170492/153138216-0a212ade-dcbc-4cb0-81f7-76870fe3b5f4.gif)
+
+* [웹으로 몰?랭을 사용해보세요!](https://mollu.gangjun.dev/playground)
+* [vscode에서 몰?랭을 사용해보세요!](https://marketplace.visualstudio.com/items?itemName=bukgeuk-penguin.mollu-lang-vsc-extension)
 
 # 구현체
 * [C++ 구현체](https://github.com/bukgeuk-penguin/mollu-lang/tree/master/mollu-lang-cpp)
