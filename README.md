@@ -1,4 +1,4 @@
-# 몰?랭
+# 몰?랭 v1.2
 
 이 프로젝트는 [rycont/umjunsik-lang](https://github.com/rycont/umjunsik-lang)에 영감을 받아 제작되었습니다.  
 
