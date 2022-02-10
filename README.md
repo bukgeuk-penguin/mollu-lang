@@ -7,9 +7,24 @@
 * [웹으로 몰?랭을 사용해보세요!](https://mollu.gangjun.dev/playground)
 * [vscode에서 몰?랭을 사용해보세요!](https://marketplace.visualstudio.com/items?itemName=bukgeuk-penguin.mollu-lang-vsc-extension)
 
+-------------------------
+
 # 구현체
-* [C++ 구현체](https://github.com/bukgeuk-penguin/mollu-lang/tree/master/mollu-lang-cpp)
-* [웹 구현체](https://github.com/bukgeuk-penguin/mollu-lang/tree/master/mollu-lang-web) ([npm 패키지](https://www.npmjs.com/package/mollu-lang-web))
+|구현체|언어 버전|구현체 버전|
+|:---:|:---:|:---:|
+|[C++](https://github.com/bukgeuk-penguin/mollu-lang/tree/master/mollu-lang-cpp)|v1.2|v1.2.0|
+|[WEB](https://github.com/bukgeuk-penguin/mollu-lang/tree/master/mollu-lang-web)([npm](https://www.npmjs.com/package/mollu-lang-web))|v1.1|v1.1.0|
+<detail>
+<details markdown="1">
+<summary>구현체 버전 규칙</summary>
+
+1. major와 minor 버전은 언어 버전을 따라야 합니다
+2. patch 버전은 자유롭게 작성 가능합니다.
+
+</details>
+</detail>
+
+-----------------------------
 
 # 문법
 ## 자료형
@@ -98,7 +113,25 @@
 
 모올!루 아아?루 모올!루 아아?루 모올!루 아아?루 => 만약 한번에 abc를 입력받았다면, abc를 출력함
 ```
+## 주석
+### 라인 주석(//, =>)
+주석의 시작부터 줄바꿈이 될때까지 무시합니다.
+### 블록 주석(/* */, <-- -->)
+주석의 시작부터 끝까지 무시합니다.
+```
+// 라인 주석 #1
+=> 라인 주석 #2
+/* 블록 주석 #1*/
+<--블록 주석 #2-->
+```
 ## 기타
 * 확장자는 **`.mol`** 입니다. (6.02\*10^23 아님 ㅡㅡ)
-* 위 키워드를 제외한 다른 텍스트는 무시합니다.
-* 모든 코드는 원라인으로 작성 가능합니다.
+* 공백, 줄바꿈이 없어도 작동합니다.
+-------------------------------
+# Release Notes
+### v1.2
+REPL 추가
+### v1.1
+주석 문법 추가
+### v1.0
+첫번째 버전
