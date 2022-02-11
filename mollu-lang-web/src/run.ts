@@ -7,7 +7,7 @@ let vartable: number[] = [];
 let labeltable: number[] = [];
 
 let calc_idx: number = 0
-function calc(tokenlist: tokenlist): number {
+async function calc(tokenlist: tokenlist): Promise<number> {
 	let isvalue = true;
 	let value = 0;
 	for (let i = calc_idx; i < tokenlist.length; i++) {
@@ -32,10 +32,10 @@ function calc(tokenlist: tokenlist): number {
 				temp = -10;
 				break;
 			case 'input_number':
-                temp = input_number()
+                temp = await input_number()
 				break;
 			case 'input_character':
-				temp = input_character()
+				temp = await input_character()
 				break;
 			default:
 				throwerror(tokenlist[i].info, '', 0);
@@ -66,7 +66,7 @@ function calc(tokenlist: tokenlist): number {
 	return value;
 }
 
-export function run(tokenlist: tokenlist) {
+export async function run(tokenlist: tokenlist) {
 	let comment = 0; // 0 = none, 1 = line, 2 = block
 
 	for (let i = 0; i < tokenlist.length; i++) {
@@ -94,7 +94,7 @@ export function run(tokenlist: tokenlist) {
 			let temp = tokenlist[i].str.length;
 			++i;
             calc_idx = i
-			let value = calc(tokenlist);
+			let value = await calc(tokenlist);
             i = calc_idx
 			vartable[temp - 3] = value;
 			break;
@@ -109,7 +109,7 @@ export function run(tokenlist: tokenlist) {
 			let temp = tokenlist[i].type;
 			++i;
             calc_idx = i
-			let value = calc(tokenlist);
+			let value = await calc(tokenlist);
             i = calc_idx
 			++i;
 			if (tokenlist[i].type == 'label') {
@@ -138,7 +138,7 @@ export function run(tokenlist: tokenlist) {
 		case 'output_number': {
 			++i;
             calc_idx = i
-			let value = calc(tokenlist);
+			let value = await calc(tokenlist);
             i = calc_idx
             output_number(value)
 			break;
@@ -146,7 +146,7 @@ export function run(tokenlist: tokenlist) {
 		case 'output_character': {
 			++i;
             calc_idx = i
-			let value = calc(tokenlist);
+			let value = await calc(tokenlist);
             i = calc_idx
             output_character(value)
 			break;
@@ -162,7 +162,7 @@ export function run(tokenlist: tokenlist) {
 	}
 }
 
-export function runRepl(code: string) {
+export async function runRepl(code: string) {
 	if (code === 'exit' || code === 'exit()') {
 		repl.endRepl()
 		return
@@ -195,7 +195,7 @@ export function runRepl(code: string) {
 			let temp = repl.repl_tokenlist[repl.repl_idx].str.length;
 			++repl.repl_idx;
             calc_idx = repl.repl_idx
-			let value = calc(repl.repl_tokenlist);
+			let value = await calc(repl.repl_tokenlist);
             repl.repl_idx = calc_idx
 			vartable[temp - 3] = value;
 			break;
@@ -210,7 +210,7 @@ export function runRepl(code: string) {
 			let temp = repl.repl_tokenlist[repl.repl_idx].type;
 			++repl.repl_idx;
             calc_idx = repl.repl_idx
-			let value = calc(repl.repl_tokenlist);
+			let value = await calc(repl.repl_tokenlist);
             repl.repl_idx = calc_idx
 			++repl.repl_idx;
 			if (repl.repl_tokenlist[repl.repl_idx].type == 'label') {
@@ -239,7 +239,7 @@ export function runRepl(code: string) {
 		case 'output_number': {
 			++repl.repl_idx;
             calc_idx = repl.repl_idx
-			let value = calc(repl.repl_tokenlist);
+			let value = await calc(repl.repl_tokenlist);
             repl.repl_idx = calc_idx
             output_number(value)
 			break;
@@ -247,7 +247,7 @@ export function runRepl(code: string) {
 		case 'output_character': {
 			++repl.repl_idx;
             calc_idx = repl.repl_idx
-			let value = calc(repl.repl_tokenlist);
+			let value = await calc(repl.repl_tokenlist);
             repl.repl_idx = calc_idx
             output_character(value)
 			break;

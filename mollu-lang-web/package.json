@@ -1,9 +1,9 @@
 {
   "name": "mollu-lang-web",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "몰?루",
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
+  "main": "build/src/index.js",
+  "types": "build/src/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
@@ -35,13 +35,14 @@
     "build"
   ],
   "dependencies": {
+    "acorn": "^8.7.0",
     "acorn-walk": "^8.2.0",
     "arg": "^4.1.3",
-    "acorn": "^8.7.0",
-    "make-error": "^1.3.6",
-    "diff": "^4.0.2",
     "create-require": "^1.1.1",
-    "yn": "^3.1.1",
-    "v8-compile-cache-lib": "^3.0.0"
+    "diff": "^4.0.2",
+    "make-error": "^1.3.6",
+    "readline": "^1.3.0",
+    "v8-compile-cache-lib": "^3.0.0",
+    "yn": "^3.1.1"
   }
 }

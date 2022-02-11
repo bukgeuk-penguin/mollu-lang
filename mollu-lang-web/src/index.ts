@@ -28,13 +28,13 @@ export function isRepl() {
     return repl.isRepl()
 }
 
-export function execute(code: string) {
+export async function execute(code: string) {
     if (repl.isRepl()) {
-        run.runRepl(code)
+        await run.runRepl(code)
     } else {
         init()
 
         let tokenlist = token.tokenize(code)
-        run.run(tokenlist)
+        await run.run(tokenlist)
     }
 }
