@@ -13,7 +13,7 @@
 |구현체|언어 버전|구현체 버전|
 |:---:|:---:|:---:|
 |[C++](https://github.com/bukgeuk-penguin/mollu-lang/tree/master/mollu-lang-cpp)|v1.2|v1.2.0|
-|[WEB](https://github.com/bukgeuk-penguin/mollu-lang/tree/master/mollu-lang-web)([npm](https://www.npmjs.com/package/mollu-lang-web))|v1.1|v1.1.0|
+|[WEB](https://github.com/bukgeuk-penguin/mollu-lang/tree/master/mollu-lang-web)([npm](https://www.npmjs.com/package/mollu-lang-web))|v1.2|v1.2.1|
 <detail>
 <details markdown="1">
 <summary>구현체 버전 규칙</summary>
