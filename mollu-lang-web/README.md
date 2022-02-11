@@ -23,3 +23,12 @@ mollu.execute('아!루 몰루')
 mollu.execute('몰!루 루')
 mollu.endRepl()
 ```
+
+node.js 환경에서 사용하기
+```ts
+import * as mollu from 'mollu-lang-web'
+
+mollu.setEnvironment('node')
+mollu.setEventListener((text: string) => console.log(text))
+mollu.execute('몰!루 모올루??모올루')
+```

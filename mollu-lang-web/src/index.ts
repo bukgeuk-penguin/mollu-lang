@@ -9,6 +9,10 @@ export function setEventListener(listener: (text: string) => void) {
     io.setEventListener(listener)
 }
 
+export function setEnvironment(env: 'web' | 'node') {
+    io.setEnvironment(env)
+}
+
 function init() {
     error.init()
 }
