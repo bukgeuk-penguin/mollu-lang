@@ -1,6 +1,7 @@
-import { tokenlist } from './token'
+import { tokenize, tokenlist } from './token'
 import { input_number, input_character, output_number, output_character } from './io'
 import { throwerror, isErrorOccurred } from './error'
+import { repl } from './repl';
 
 let vartable: number[] = [];
 let labeltable: number[] = [];
@@ -154,6 +155,104 @@ export function run(tokenlist: tokenlist) {
 			break;
 		default:
 			throwerror(tokenlist[i].info, "", 0);
+		}
+	}
+}
+
+export function runRepl(code: string) {
+	if (code === 'exit' || code === 'exit()') {
+		repl.endRepl()
+		return
+	}
+	let tl = tokenize(code)
+	repl.repl_tokenlist = repl.repl_tokenlist.concat(tl)
+
+	for (; repl.repl_idx < repl.repl_tokenlist.length; repl.repl_idx++) {
+        if (isErrorOccurred() || !repl.isRepl()) break;
+
+		switch (repl.repl_tokenlist[repl.repl_idx].type) {
+			case 'line_comment':
+				if (repl.repl_comment == 0) repl.repl_comment = 1;
+				break;
+			case 'line_feed':
+				if (repl.repl_comment == 1) repl.repl_comment = 0;
+				break;
+			case 'block_comment_start':
+				if (repl.repl_comment == 0) repl.repl_comment = 2;
+				break;
+			case 'block_comment_end':
+				if (repl.repl_comment == 2) repl.repl_comment = 0;
+				break;
+		}
+	
+		if (repl.repl_comment != 0) continue;
+
+		switch (repl.repl_tokenlist[repl.repl_idx].type) {
+		case 'assign': {
+			let temp = repl.repl_tokenlist[repl.repl_idx].str.length;
+			++repl.repl_idx;
+            calc_idx = repl.repl_idx
+			let value = calc(repl.repl_tokenlist);
+            repl.repl_idx = calc_idx
+			vartable[temp - 3] = value;
+			break;
+		}
+		case 'jump_equal':
+		case 'jump_less': 
+		case 'jump_greater': {
+			let temp = repl.repl_tokenlist[repl.repl_idx].type;
+			++repl.repl_idx;
+            calc_idx = repl.repl_idx
+			let value = calc(repl.repl_tokenlist);
+            repl.repl_idx = calc_idx
+			++repl.repl_idx;
+			if (repl.repl_idx >= repl.repl_tokenlist.length) throwerror(repl.repl_tokenlist[repl.repl_idx - 1].info, "", 0)
+			if (repl.repl_tokenlist[repl.repl_idx].type == 'label') {
+				let togo = labeltable[repl.repl_tokenlist[repl.repl_idx].str.length - 4];
+				if (togo < 0) {
+					throwerror(repl.repl_tokenlist[repl.repl_idx].info, "", 0);
+				}
+
+				let condition = false;
+				if (temp == 'jump_equal') condition = (value == 0);
+				else if (temp == 'jump_less') condition = (value < 0);
+				else if (temp == 'jump_greater') condition = (value > 0);
+
+				if (condition) {
+					repl.repl_idx = togo;
+				}
+			} else {
+				throwerror(repl.repl_tokenlist[repl.repl_idx].info, "", 0);
+			}
+			break;
+		}
+		case 'define_label': {
+			labeltable[repl.repl_tokenlist[repl.repl_idx].str.length - 4] = repl.repl_idx;
+			break;
+		}
+		case 'output_number': {
+			++repl.repl_idx;
+            calc_idx = repl.repl_idx
+			let value = calc(repl.repl_tokenlist);
+            repl.repl_idx = calc_idx
+            output_number(value)
+			break;
+		}
+		case 'output_character': {
+			++repl.repl_idx;
+            calc_idx = repl.repl_idx
+			let value = calc(repl.repl_tokenlist);
+            repl.repl_idx = calc_idx
+            output_character(value)
+			break;
+		}
+		case 'line_comment':
+		case 'line_feed':
+		case 'block_comment_start':
+		case 'block_comment_end':
+			break;
+		default:
+			throwerror(repl.repl_tokenlist[repl.repl_idx].info, "", 0);
 		}
 	}
 }
