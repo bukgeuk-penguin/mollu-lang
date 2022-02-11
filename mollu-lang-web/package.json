@@ -1,6 +1,6 @@
 {
   "name": "mollu-lang-web",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "몰?루",
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
