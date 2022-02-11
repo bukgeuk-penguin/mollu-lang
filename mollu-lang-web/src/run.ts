@@ -102,13 +102,16 @@ export function run(tokenlist: tokenlist) {
 		case 'jump_equal':
 		case 'jump_less': 
 		case 'jump_greater': {
+			if (i + 2 >= tokenlist.length) {
+				throwerror(tokenlist[i].info, "", 0)
+				break;
+			}
 			let temp = tokenlist[i].type;
 			++i;
             calc_idx = i
 			let value = calc(tokenlist);
             i = calc_idx
 			++i;
-			if (i >= tokenlist.length) throwerror(tokenlist[i - 1].info, "", 0)
 			if (tokenlist[i].type == 'label') {
 				let togo = labeltable[tokenlist[i].str.length - 4];
 				if (togo < 0) {
@@ -200,13 +203,16 @@ export function runRepl(code: string) {
 		case 'jump_equal':
 		case 'jump_less': 
 		case 'jump_greater': {
+			if (repl.repl_idx + 2 >= repl.repl_tokenlist.length) {
+				throwerror(repl.repl_tokenlist[repl.repl_idx].info, "", 0)
+				break;
+			}
 			let temp = repl.repl_tokenlist[repl.repl_idx].type;
 			++repl.repl_idx;
             calc_idx = repl.repl_idx
 			let value = calc(repl.repl_tokenlist);
             repl.repl_idx = calc_idx
 			++repl.repl_idx;
-			if (repl.repl_idx >= repl.repl_tokenlist.length) throwerror(repl.repl_tokenlist[repl.repl_idx - 1].info, "", 0)
 			if (repl.repl_tokenlist[repl.repl_idx].type == 'label') {
 				let togo = labeltable[repl.repl_tokenlist[repl.repl_idx].str.length - 4];
 				if (togo < 0) {
